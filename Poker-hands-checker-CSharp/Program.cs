@@ -191,11 +191,16 @@ namespace Poker_hands_checker_CSharp
 
         private static bool IsStraight(Player player)
         {
-            List<Card> cards = player.Cards.OrderBy(p => p.Value).ToList();
-
-            return (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "King").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Queen").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Jack").ToList().Count == 1 && player.Cards.Where(p => p.Value == "10").ToList().Count == 1) || (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "2").ToList().Count == 1 && player.Cards.Where(p => p.Value == "3").ToList().Count == 1 && player.Cards.Where(p => p.Value == "4").ToList().Count == 1 && player.Cards.Where(p => p.Value == "5").ToList().Count == 1)
+            if (player.Cards.Any(p => p.Value == "Ace") || player.Cards.Any(p => p.Value == "King") || player.Cards.Any(p => p.Value == "Queen") || player.Cards.Any(p => p.Value == "Jack"))
+            {
+                return (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "King").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Queen").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Jack").ToList().Count == 1 && player.Cards.Where(p => p.Value == "10").ToList().Count == 1) || (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "2").ToList().Count == 1 && player.Cards.Where(p => p.Value == "3").ToList().Count == 1 && player.Cards.Where(p => p.Value == "4").ToList().Count == 1 && player.Cards.Where(p => p.Value == "5").ToList().Count == 1)
                 ? true
                 : false;
+            }
+
+            List<Card> cards = player.Cards.OrderBy(p => p.Value).ToList();
+
+            return !cards.Select((i, j) => Convert.ToInt32(i) - Convert.ToInt32(j)).Distinct().Skip(1).Any() ? false : true;
         }
 
         private static bool IsThreeOfAKind(Player player)

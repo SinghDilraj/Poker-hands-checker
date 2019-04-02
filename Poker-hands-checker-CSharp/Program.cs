@@ -14,7 +14,7 @@ namespace Poker_hands_checker_CSharp
 
             List<Player> Players = new List<Player>();
 
-            List<string> Values = new List<string> { "King", "Queen", "Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2", "Ace" };
+            List<string> Values = new List<string> { "Ace", "King", "Queen", "Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2" };
 
             List<string> Suites = new List<string> { "Hearts", "Clubs", "Diamonds", "Spades" };
 
@@ -168,15 +168,14 @@ namespace Poker_hands_checker_CSharp
                 }
             }
 
-            //foreach (Player player in players)
-            //{
-            //    if (IsHighCard(player))
-            //    {
-            //        return player.Id + "Won with One Pair";
-            //    }
-            //}
+            foreach (Player player in players)
+            {
+                player.HighCard = IsHighCard(player);
+            }
 
-            return "";
+            List<string> Values = new List<string> { "Ace", "King", "Queen", "Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2" };
+
+            return players.OrderBy(p => Values.IndexOf(p.HighCard)).Take(1).ToList().FirstOrDefault().Id + "Won with High Card";
         }
 
         private static bool IsFourOfAKind(Player player)
@@ -218,9 +217,29 @@ namespace Poker_hands_checker_CSharp
             return player.Cards.GroupBy(p => p.Value).OrderBy(p => p.Count()).Take(1).All(p => p.ToList().Count == 2) ? true : false;
         }
 
-        //private static bool IsHighCard(Player player)
-        //{
-        //    return player.Cards.OrderBy(p => p.Value) ? true : false;
-        //}
+        private static string IsHighCard(Player player)
+        {
+            if (player.Cards.Any(p => p.Value == "Ace"))
+            {
+                return "Ace";
+            }
+            else if (player.Cards.Any(p => p.Value == "King"))
+            {
+                return "King";
+            }
+            else if (player.Cards.Any(p => p.Value == "Queen"))
+            {
+                return "Queen";
+            }
+            else if (player.Cards.Any(p => p.Value == "Jack"))
+            {
+                return "Jack";
+            }
+            else
+            {
+                return player.Cards.Where(p => int.TryParse(p.Value, out int num)).ToList().OrderByDescending(p => p.Value).Take(1).FirstOrDefault().Value;
+            }
+
+        }
     }
 }

@@ -106,7 +106,7 @@ namespace Poker_hands_checker_CSharp
             {
                 if (IsStraight(player) && IsFlush(player))
                 {
-                    return player.Id + "Won with Straight Flush";
+                    return "Player" + player.Id + " Won with Straight Flush";
                 }
             }
 
@@ -115,7 +115,7 @@ namespace Poker_hands_checker_CSharp
 
                 if (IsFourOfAKind(player))
                 {
-                    return player.Id + "Won with Four of a Kind";
+                    return "Player" + player.Id + " Won with Four of a Kind";
                 }
             }
 
@@ -124,7 +124,7 @@ namespace Poker_hands_checker_CSharp
 
                 if (IsOnePair(player) && IsThreeOfAKind(player))
                 {
-                    return player.Id + "Won with Full House";
+                    return "Player" + player.Id + " Won with Full House";
                 }
             }
 
@@ -132,7 +132,7 @@ namespace Poker_hands_checker_CSharp
             {
                 if (IsFlush(player))
                 {
-                    return player.Id + "Won with Flush";
+                    return "Player" + player.Id + " Won with Flush";
                 }
             }
 
@@ -140,7 +140,7 @@ namespace Poker_hands_checker_CSharp
             {
                 if (IsStraight(player))
                 {
-                    return player.Id + "Won with Straight";
+                    return "Player" + player.Id + " Won with Straight";
                 }
             }
 
@@ -148,7 +148,7 @@ namespace Poker_hands_checker_CSharp
             {
                 if (IsThreeOfAKind(player))
                 {
-                    return player.Id + "Won with Three of a Kind";
+                    return "Player" + player.Id + " Won with Three of a Kind";
                 }
             }
 
@@ -156,7 +156,7 @@ namespace Poker_hands_checker_CSharp
             {
                 if (IsTwoPair(player))
                 {
-                    return player.Id + "Won with Two Pair";
+                    return "Player" + player.Id + " Won with Two Pair";
                 }
             }
 
@@ -164,7 +164,7 @@ namespace Poker_hands_checker_CSharp
             {
                 if (IsOnePair(player))
                 {
-                    return player.Id + "Won with One Pair";
+                    return "Player" + player.Id + " Won with One Pair";
                 }
             }
 
@@ -175,7 +175,7 @@ namespace Poker_hands_checker_CSharp
 
             List<string> Values = new List<string> { "Ace", "King", "Queen", "Jack", "10", "9", "8", "7", "6", "5", "4", "3", "2" };
 
-            return players.OrderBy(p => Values.IndexOf(p.HighCard)).Take(1).ToList().FirstOrDefault().Id + "Won with High Card";
+            return "Player" + players.OrderBy(p => Values.IndexOf(p.HighCard)).Take(1).ToList().FirstOrDefault().Id + " Won with High Card";
         }
 
         private static bool IsFourOfAKind(Player player)
@@ -192,14 +192,14 @@ namespace Poker_hands_checker_CSharp
         {
             if (player.Cards.Any(p => p.Value == "Ace") || player.Cards.Any(p => p.Value == "King") || player.Cards.Any(p => p.Value == "Queen") || player.Cards.Any(p => p.Value == "Jack"))
             {
-                return (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "King").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Queen").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Jack").ToList().Count == 1 && player.Cards.Where(p => p.Value == "10").ToList().Count == 1) || (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "2").ToList().Count == 1 && player.Cards.Where(p => p.Value == "3").ToList().Count == 1 && player.Cards.Where(p => p.Value == "4").ToList().Count == 1 && player.Cards.Where(p => p.Value == "5").ToList().Count == 1)
+                return (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "King").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Queen").ToList().Count == 1 && player.Cards.Where(p => p.Value == "Jack").ToList().Count == 1 && player.Cards.Where(p => p.Value == "10").ToList().Count == 1) || (player.Cards.Where(p => p.Value == "Ace").ToList().Count == 1 && player.Cards.Where(p => p.Value == "2").ToList().Count == 1 && player.Cards.Where(p => p.Value == "3").ToList().Count == 1 && player.Cards.Where(p => p.Value == "4").ToList().Count == 1 && player.Cards.Where(p => p.Value == "5").ToList().Count == 1) || (player.Cards.Where(p => p.Value == "Jack").ToList().Count == 1 && player.Cards.Where(p => p.Value == "10").ToList().Count == 1 && player.Cards.Where(p => p.Value == "9").ToList().Count == 1 && player.Cards.Where(p => p.Value == "8").ToList().Count == 1 && player.Cards.Where(p => p.Value == "7").ToList().Count == 1)
                 ? true
                 : false;
             }
 
             List<Card> cards = player.Cards.OrderBy(p => p.Value).ToList();
 
-            return !cards.Select((i, j) => Convert.ToInt32(i) - Convert.ToInt32(j)).Distinct().Skip(1).Any() ? false : true;
+            return cards.Zip(cards.Skip(1), (a, b) => (Convert.ToInt32(a.Value) + 1) == Convert.ToInt32(b.Value)).All(x => x) ? true : false;
         }
 
         private static bool IsThreeOfAKind(Player player)
@@ -214,7 +214,7 @@ namespace Poker_hands_checker_CSharp
 
         private static bool IsOnePair(Player player)
         {
-            return player.Cards.GroupBy(p => p.Value).OrderBy(p => p.Count()).Take(1).All(p => p.ToList().Count == 2) ? true : false;
+            return player.Cards.GroupBy(p => p.Value).OrderBy(p => p.Count()).Take(1).ToList().All(p => p.ToList().Count == 2) ? true : false;
         }
 
         private static string IsHighCard(Player player)

@@ -209,12 +209,12 @@ namespace Poker_hands_checker_CSharp
 
         private static bool IsTwoPair(Player player)
         {
-            return player.Cards.GroupBy(p => p.Value).OrderBy(p => p.Count()).Take(2).All(p => p.ToList().Count == 2) ? true : false;
+            return player.Cards.OrderByDescending(p => p.Value).GroupBy(p => p.Value).Take(2).All(p => p.ToList().Count == 2) ? true : false;
         }
 
         private static bool IsOnePair(Player player)
         {
-            return player.Cards.GroupBy(p => p.Value).OrderBy(p => p.Count()).Take(1).ToList().All(p => p.ToList().Count == 2) ? true : false;
+            return player.Cards.OrderByDescending(p => p.Value).GroupBy(p => p.Value).Take(1).All(p => p.ToList().Count == 2) ? true : false;
         }
 
         private static string IsHighCard(Player player)
